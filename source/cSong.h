@@ -26,6 +26,9 @@ public:
 	unsigned int getUniqueID(void) { return this->uniqueID; }
 
 	unsigned int uniqueID;
+
+private:
+	
 }; 
 
 #endif

@@ -16,5 +16,6 @@ void main()
 	pPersonGen->generateRandomPerson();
 	cMusicGenerator* pMusicGen = new cMusicGenerator();
 	pMusicGen->LoadMusicInformation(BILLBOARD, error);
+	pMusicGen->getRandomSong();
 	std::cout << error << std::endl;
 }

@@ -3,6 +3,7 @@
 
 #include "cSong.h"
 #include "myLink.h"
+#include "myList.h"
 
 class cMusicGenerator
 {
@@ -20,7 +21,10 @@ public:
 	cSong* findSong(std::string songName, std::string artist);
 
 private:
-	myLink<cSong>  	songlist;
+	myLink<cSong>  	songlink;
+	unsigned int next_uID;
+	const unsigned int MAX_ID_INCREEMNT = 11;
+	//myList<cSong>  	songlist;
 };
 
 #endif

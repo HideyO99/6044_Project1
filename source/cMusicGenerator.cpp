@@ -7,6 +7,8 @@
 
 cMusicGenerator::cMusicGenerator()
 {
+	srand(time(NULL));
+	next_uID = 10000;
 }
 
 cMusicGenerator::~cMusicGenerator()
@@ -46,30 +48,50 @@ bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::strin
 					}
 					tokenCount++;
 				}
-				if (songlist.size() == 0)
-				{
-					songlist.insertFront(*newSong);
-				}
-				else
-				{
-					int cmpResult = std::strcmp(songlist.getTail()->data.name.c_str(), newSong->name.c_str());
-					if (cmpResult < 0)
-					{
-						songlist.insertEnd(*newSong);
-					}
-					if (cmpResult == 0)
-					{
+				newSong->uniqueID = next_uID;
+				next_uID += rand() % MAX_ID_INCREEMNT;
+				//if (songlist.size() == 0)
+				//{
+				//	songlist.insertFront(*newSong);
+				//}
+				//else
+				//{
+				//	int cmpTailResult = std::strcmp(songlist.getTail()->data.name.c_str(), newSong->name.c_str());
+				//	if (cmpTailResult < 0)
+				//	{
+				//		songlist.insertEnd(*newSong);
+				//	}
+				//	if (cmpTailResult == 0)
+				//	{
 
-					}
-					if (cmpResult > 0)
-					{
-						
-					}
-				}
-				songlist.insertEnd(*newSong);
+				//	}
+				//	if (cmpTailResult > 0)
+				//	{
+				//		int cmpHeadResult = std::strcmp(songlist.getHead()->data.name.c_str(), newSong->name.c_str());
+				//		if (cmpHeadResult > 0)
+				//		{
+				//			songlist.insertFront(*newSong);
+				//		}
+				//		if (cmpHeadResult < 0)
+				//		{
+				//			int index = 1;
+				//			while (std::strcmp(songlist.getIndex(index)->data.name.c_str(), newSong->name.c_str()) < 0)
+				//			{
+				//				index++;
+				//			}
+				//			if (std::strcmp(songlist.getIndex(index)->data.name.c_str(), newSong->name.c_str()) > 0)
+				//			{
+				//				songlist.insertAfter(songlist.getIndex(index), *newSong);
+				//			}
+				//		}
+				//	}
+				//}
+				songlink.insertEnd(*newSong);
+				//songlist.insert(*newSong);
 				delete newSong;
 			}
 			linecount++;
+			//std::cout << linecount << std::endl;
 		}
 		song_file.close();
 	}
@@ -79,10 +101,25 @@ bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::strin
 
 cSong* cMusicGenerator::getRandomSong(void)
 {
-    return nullptr;
+	int randIndex = rand() % songlink.size();
+
+	cSong* song = new cSong();
+	myLink<cSong>::Node* node = songlink.getIndex(randIndex);
+	song->name = node->data.name;
+	song->artist = node->data.artist;
+
+	return findSong(song->name,song->artist);
 }
 
 cSong* cMusicGenerator::findSong(std::string songName, std::string artist)
 {
-    return nullptr;
+	int i = 0;
+	while ((songlink.getIndex(i)->data.name != songName)&&(songlink.getIndex(i)->data.artist != artist))
+	{
+		i++;
+	}
+
+    return &songlink.getIndex(i)->data;
 }
+
+
