@@ -169,43 +169,178 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 
 bool cSnotify::AddSongToUserLibrary(unsigned int snotifyUserID, cSong* pNewSong, std::string& errorString)
 {
-	for (int i = 0; i < library.size(); i++)
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
 	{
-		if (library.getIndex(i)->data.uID == snotifyUserID)
+		if (node->data.uID == snotifyUserID)
 		{
-			for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+			myLink<cSong>::Node* songNode = node->data.song.getHead();
+			while (songNode != nullptr)
 			{
-				if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == pNewSong->getUniqueID())
+				if (songNode->data.getUniqueID() == pNewSong->getUniqueID())
 				{
 					errorString = "Already exist in the library";
 					return false;
 				}
+				songNode = songNode->next;
 			}
-			library.getIndex(i)->data.song.insertEnd(*pNewSong);
+			node->data.song.insertEnd(*pNewSong);
 			return true;
 		}
+		node = node->next;
 	}
+	//for (int i = 0; i < library.size(); i++)
+	//{
+	//	if (library.getIndex(i)->data.uID == snotifyUserID)
+	//	{
+	//		for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+	//		{
+	//			if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == pNewSong->getUniqueID())
+	//			{
+	//				errorString = "Already exist in the library";
+	//				return false;
+	//			}
+	//		}
+	//		library.getIndex(i)->data.song.insertEnd(*pNewSong);
+	//		return true;
+	//	}
+	//}
 	errorString = "Cannot find user ID";
 	return false;
 }
 
 bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned int SnotifySongID, std::string& errorString)
 {
-	for (int i = 0; i < library.size(); i++)
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
 	{
-		if (library.getIndex(i)->data.uID == snotifyUserID)
+		if (node->data.uID == snotifyUserID)
 		{
-			for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+			myLink<cSong>::Node* songNode = node->data.song.getHead();
+			while (songNode != nullptr)
 			{
-				if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == SnotifySongID)
+				if (songNode->data.getUniqueID() == SnotifySongID)
 				{
-					library.getIndex(i)->data.song.deleteNode(library.getIndex(i)->data.song.getIndex(j));
+					node->data.song.deleteNode(songNode);
 					return true;
 				}
+				songNode = songNode->next;
 			}
 		}
+		node = node->next;
 	}
+	//for (int i = 0; i < library.size(); i++)
+	//{
+	//	if (library.getIndex(i)->data.uID == snotifyUserID)
+	//	{
+	//		for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+	//		{
+	//			if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == SnotifySongID)
+	//			{
+	//				library.getIndex(i)->data.song.deleteNode(library.getIndex(i)->data.song.getIndex(j));
+	//				return true;
+	//			}
+	//		}
+	//	}
+	//}
 	errorString = "Cannot find user ID";
+	return false;
+}
+
+bool cSnotify::UpdateRatingOnSong(unsigned int SnotifyUserID, unsigned int songUniqueID, unsigned int newRating)
+{
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr) 
+	{
+		if (node->data.uID == SnotifyUserID)
+		{
+			myLink<cSong>::Node* songNode = node->data.song.getHead();
+			while (songNode != nullptr)
+			{
+				if (songNode->data.getUniqueID() == songUniqueID)
+				{
+					songNode->data.rating = newRating;
+					return true;
+				}
+				songNode = songNode->next;
+			}
+		}
+		node = node->next;
+	}
+	return false;
+}
+
+cSong* cSnotify::GetSong(unsigned int SnotifyUserID, unsigned int songUniqueID, std::string& errorString)
+{
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.uID == SnotifyUserID)
+		{
+			myLink<cSong>::Node* songNode = node->data.song.getHead();
+			while (songNode != nullptr)
+			{
+				if (songNode->data.getUniqueID() == songUniqueID)
+				{
+					songNode->data.numberOfTimesPlayed++;
+					return &songNode->data;
+				}
+				songNode = songNode->next;
+			}
+			errorString = "cannot find song in this user's library";
+			return nullptr;
+		}
+		node = node->next;
+	}
+	errorString = "cannot find userID";
+	return nullptr;
+}
+
+bool cSnotify::GetCurrentSongRating(unsigned int snotifyUserID, unsigned int songUniqueID, unsigned int& songRating)
+{
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.uID == snotifyUserID)
+		{
+			myLink<cSong>::Node* songNode = node->data.song.getHead();
+			while (songNode != nullptr)
+			{
+				if (songNode->data.getUniqueID() == songUniqueID)
+				{
+					songRating = songNode->data.rating;
+					return true;
+				}
+				songNode = songNode->next;
+			}
+			return false;
+		}
+		node = node->next;
+	}
+	return false;
+}
+
+bool cSnotify::GetCurrentSongNumberOfPlays(unsigned int snotifyUserID, unsigned int songUniqueID, unsigned int& numberOfPlays)
+{
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.uID == snotifyUserID)
+		{
+			myLink<cSong>::Node* songNode = node->data.song.getHead();
+			while (songNode != nullptr)
+			{
+				if (songNode->data.getUniqueID() == songUniqueID)
+				{
+					numberOfPlays = songNode->data.numberOfTimesPlayed;
+					return true;
+				}
+				songNode = songNode->next;
+			}
+			return false;
+		}
+		node = node->next;
+	}
 	return false;
 }
 
