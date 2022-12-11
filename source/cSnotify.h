@@ -4,6 +4,7 @@
 #include "cPerson.h"
 #include "cSong.h"
 #include "myLink.h"
+#include "Libraty.h"
 
 
 class cSnotify
@@ -83,6 +84,7 @@ public:
 private:
 	myLink<cPerson> user;
 	myLink<cSong> song;
+	myLink<Library> library;
 	
 };
 

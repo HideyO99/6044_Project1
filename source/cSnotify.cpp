@@ -27,14 +27,23 @@ bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 			else
 			{
 				user.insertAfter(user.getIndex(i)->prev, *pPerson);
+				Library* ulib = new Library();
+				ulib->uID = pPerson->getSnotifyUniqueUserID();
+				library.insertAfter(library.getIndex(i)->prev, *ulib);
 				return true;
 			}
 		}
 		user.insertEnd(*pPerson);
+		Library* ulib = new Library();
+		ulib->uID = pPerson->getSnotifyUniqueUserID();
+		library.insertEnd( *ulib);
 	}
 	else
 	{
 		user.insertEnd(*pPerson);
+		Library* ulib = new Library();
+		ulib->uID = pPerson->getSnotifyUniqueUserID();
+		library.insertEnd( *ulib);
 	}
 
 	return true;
@@ -132,6 +141,71 @@ bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
 		}
 	}
 	errorString = "Cannot find song to update";
+	return false;
+}
+
+bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
+{
+	for (int i = 0; i < song.size(); i++)
+	{
+		//for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+		//{
+		//	if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == UniqueSongID)
+		//	{
+		//		library.getIndex(i)->data.song.deleteNode(library.getIndex(i)->data.song.getIndex(j));
+		//	}
+		//}
+		if (song.getIndex(i)->data.getUniqueID() == UniqueSongID)
+		{
+			RemoveSongFromUserLibrary(library.getIndex(i)->data.uID, UniqueSongID, errorString); //remove song from each user library first
+			song.deleteNode(song.getIndex(i));
+
+			return true;
+		}
+	}
+	errorString = "Cannot find song to delete";
+	return false;
+}
+
+bool cSnotify::AddSongToUserLibrary(unsigned int snotifyUserID, cSong* pNewSong, std::string& errorString)
+{
+	for (int i = 0; i < library.size(); i++)
+	{
+		if (library.getIndex(i)->data.uID == snotifyUserID)
+		{
+			for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+			{
+				if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == pNewSong->getUniqueID())
+				{
+					errorString = "Already exist in the library";
+					return false;
+				}
+			}
+			library.getIndex(i)->data.song.insertEnd(*pNewSong);
+			return true;
+		}
+	}
+	errorString = "Cannot find user ID";
+	return false;
+}
+
+bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned int SnotifySongID, std::string& errorString)
+{
+	for (int i = 0; i < library.size(); i++)
+	{
+		if (library.getIndex(i)->data.uID == snotifyUserID)
+		{
+			for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
+			{
+				if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == SnotifySongID)
+				{
+					library.getIndex(i)->data.song.deleteNode(library.getIndex(i)->data.song.getIndex(j));
+					return true;
+				}
+			}
+		}
+	}
+	errorString = "Cannot find user ID";
 	return false;
 }
 

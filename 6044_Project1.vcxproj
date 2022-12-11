@@ -132,6 +132,7 @@
     <ClInclude Include="source\cPersonGenerator.h" />
     <ClInclude Include="source\cSnotify.h" />
     <ClInclude Include="source\cSong.h" />
+    <ClInclude Include="source\Libraty.h" />
     <ClInclude Include="source\myLink.h" />
     <ClInclude Include="source\myList.h" />
   </ItemGroup>
@@ -141,6 +142,7 @@
     <ClCompile Include="source\cPersonGenerator.cpp" />
     <ClCompile Include="source\cSnotify.cpp" />
     <ClCompile Include="source\cSong.cpp" />
+    <ClCompile Include="source\Libraty.cpp" />
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
