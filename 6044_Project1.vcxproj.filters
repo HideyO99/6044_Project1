@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Person">
+      <UniqueIdentifier>{0cfe024b-acb6-47f0-969a-86d9d2564869}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PersonGen">
+      <UniqueIdentifier>{9fdfee77-6e1f-4951-abcf-2ea52c8a4fe2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Snotify">
+      <UniqueIdentifier>{e7ff720f-ca10-4cf0-be05-fff98090a88a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Song">
+      <UniqueIdentifier>{032bbd83-2d08-4151-951b-70b2cca2dc3f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Music">
+      <UniqueIdentifier>{9f17a34f-366e-4402-9f8c-136c4849d7cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{42dba1cc-197a-4e37-bdb6-a3968993b6b8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="source\cPerson.h">
+      <Filter>Person</Filter>
+    </ClInclude>
+    <ClInclude Include="source\cPersonGenerator.h">
+      <Filter>PersonGen</Filter>
+    </ClInclude>
+    <ClInclude Include="source\cSnotify.h">
+      <Filter>Snotify</Filter>
+    </ClInclude>
+    <ClInclude Include="source\cMusicGenerator.h">
+      <Filter>Music</Filter>
+    </ClInclude>
+    <ClInclude Include="source\myList.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="source\cSong.h">
+      <Filter>Song</Filter>
+    </ClInclude>
+    <ClInclude Include="source\myLink.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="source\cPerson.cpp">
+      <Filter>Person</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cPersonGenerator.cpp">
+      <Filter>PersonGen</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cSnotify.cpp">
+      <Filter>Snotify</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cMusicGenerator.cpp">
+      <Filter>Music</Filter>
+    </ClCompile>
+    <ClCompile Include="source\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="source\cSong.cpp">
+      <Filter>Song</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
