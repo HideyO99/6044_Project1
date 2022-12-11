@@ -3,6 +3,7 @@
 
 #include "cPerson.h"
 #include "cSong.h"
+#include "myLink.h"
 
 
 class cSnotify
@@ -79,7 +80,10 @@ public:
 	// Sorted ascending by last name THEN first name.
 	bool FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray);
 
-
+private:
+	myLink<cPerson> user;
+	myLink<cSong> song;
+	
 };
 
 #endif // !_cSnotify_HG_

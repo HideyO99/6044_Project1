@@ -48,44 +48,9 @@ bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::strin
 					}
 					tokenCount++;
 				}
-				newSong->uniqueID = next_uID;
+				newSong->setUniqueID(next_uID);
 				next_uID += rand() % MAX_ID_INCREEMNT;
-				//if (songlist.size() == 0)
-				//{
-				//	songlist.insertFront(*newSong);
-				//}
-				//else
-				//{
-				//	int cmpTailResult = std::strcmp(songlist.getTail()->data.name.c_str(), newSong->name.c_str());
-				//	if (cmpTailResult < 0)
-				//	{
-				//		songlist.insertEnd(*newSong);
-				//	}
-				//	if (cmpTailResult == 0)
-				//	{
 
-				//	}
-				//	if (cmpTailResult > 0)
-				//	{
-				//		int cmpHeadResult = std::strcmp(songlist.getHead()->data.name.c_str(), newSong->name.c_str());
-				//		if (cmpHeadResult > 0)
-				//		{
-				//			songlist.insertFront(*newSong);
-				//		}
-				//		if (cmpHeadResult < 0)
-				//		{
-				//			int index = 1;
-				//			while (std::strcmp(songlist.getIndex(index)->data.name.c_str(), newSong->name.c_str()) < 0)
-				//			{
-				//				index++;
-				//			}
-				//			if (std::strcmp(songlist.getIndex(index)->data.name.c_str(), newSong->name.c_str()) > 0)
-				//			{
-				//				songlist.insertAfter(songlist.getIndex(index), *newSong);
-				//			}
-				//		}
-				//	}
-				//}
 				songlink.insertEnd(*newSong);
 				//songlist.insert(*newSong);
 				delete newSong;
@@ -96,7 +61,7 @@ bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::strin
 		song_file.close();
 	}
 
-    return false;
+    return true;
 }
 
 cSong* cMusicGenerator::getRandomSong(void)
