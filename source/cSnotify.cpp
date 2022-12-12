@@ -1,5 +1,32 @@
 #include "cSnotify.h"
 
+//template <typename T>
+//void swap(T* a, T* b)
+//{
+//	T tmp = *a;
+//	*a = *b;
+//	*b = tmp;
+//}
+//template <typename T>
+//T partition(T arr[], int low, int high)
+//{
+//	T pivot = arr[high];
+//	int i = low - 1;
+//	for (int j = low; j < high; j++)
+//	{
+//		if (arr[j] < pivot)
+//		{
+//			i++;
+//			swap(&arr[i], &arr[j]);
+//		}
+//	}
+//	swap(&arr[i + 1], &arr[high]);
+//	return (i + 1);
+//}
+//template <typename T>
+//void quickSort(T arr[], int low, int high);
+void bubbleSort(cSong*& pLibraryArray, unsigned int& sizeOfLibary, bool byTitle);
+void bubbleSort(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray, std::string option);
 
 cSnotify::cSnotify()
 {
@@ -344,6 +371,63 @@ bool cSnotify::GetCurrentSongNumberOfPlays(unsigned int snotifyUserID, unsigned 
 	return false;
 }
 
+cPerson* cSnotify::FindUserBySIN(unsigned int SIN)
+{
+	myLink<cPerson>::Node* node = user.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.SIN == SIN)
+		{
+			return &node->data;
+		}
+		node = node->next;
+	}
+	return nullptr;
+}
+
+cPerson* cSnotify::FindUserBySnotifyID(unsigned int SnotifyID)
+{
+	myLink<cPerson>::Node* node = user.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.getSnotifyUniqueUserID() == SnotifyID)
+		{
+			return &node->data;
+		}
+		node = node->next;
+	}
+	return nullptr;
+}
+
+//finding the song which already added into snotify. this fn is not search the whole song DB
+cSong* cSnotify::FindSong(std::string title, std::string artist)
+{
+	myLink<cSong>::Node* node = song.getHead();
+	while (node != nullptr)
+	{
+		if ((node->data.name.c_str() == title.c_str()) && node->data.artist.c_str() == artist.c_str())
+		{
+			return &node->data;
+		}
+		node = node->next;
+	}
+	return nullptr;
+}
+
+cSong* cSnotify::FindSong(unsigned int uniqueID)
+{
+	myLink<cSong>::Node* node = song.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.getUniqueID() == uniqueID)
+		{
+			return &node->data;
+		}
+		node = node->next;
+	}
+	return nullptr;
+}
+
 // This returns a COPY of the users library, in the form of a regular dynamic array.
 bool cSnotify::GetUsersSongLibrary(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
 {
@@ -365,7 +449,223 @@ bool cSnotify::GetUsersSongLibrary(unsigned int snotifyUserID, cSong*& pLibraryA
 	// The array and the size of the array are "returned" by reference to the caller. 
 
 	// TODO: Copy all the songs over
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
+	{
+		if (node->data.uID == snotifyUserID)
+		{
+			sizeOfLibary = node->data.song.size();
+			pLibraryArray = new cSong[sizeOfLibary];
+			for (int i = 0; i < sizeOfLibary; i++)
+			{
+				pLibraryArray[i] = node->data.song.getIndex(i)->data;
+			}
+			return true;
+		}
+		node = node->next;
+	}
 
-	return true;
+	return false;
 }
 
+bool cSnotify::GetUsersSongLibraryAscendingByTitle(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
+{
+	bool result = GetUsersSongLibrary(snotifyUserID, pLibraryArray, sizeOfLibary);
+	if (result)
+	{
+		bubbleSort(pLibraryArray, sizeOfLibary, true);
+		return true;
+	}
+
+	return false;
+}
+
+bool cSnotify::GetUsersSongLibraryAscendingByArtist(unsigned int snotifyUserID, cSong*& pLibraryArray, unsigned int& sizeOfLibary)
+{
+	bool result = GetUsersSongLibrary(snotifyUserID, pLibraryArray, sizeOfLibary);
+	if (result)
+	{
+		bubbleSort(pLibraryArray, sizeOfLibary, false);
+	}
+	return false;
+}
+
+bool cSnotify::GetUsers(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	//myLink<cPerson>::Node* node = user.getHead();
+	sizeOfUserArray = user.size();
+	pAllTheUsers = new cPerson[sizeOfUserArray];
+
+	if (sizeOfUserArray > 0) 
+	{
+		for (int i = 0; i < sizeOfUserArray; i++)
+		{
+			pAllTheUsers[i] = user.getIndex(i)->data;
+		}
+
+		return true;
+	}
+
+	return false;
+}
+
+bool cSnotify::GetUsersByID(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	bool result = GetUsers(pAllTheUsers, sizeOfUserArray);
+	if (result)
+	{
+		bubbleSort(pAllTheUsers, sizeOfUserArray,"byID");
+		return true;
+	}
+	return false;
+}
+
+bool cSnotify::FindUsersFirstName(std::string firstName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	myLink<cPerson>::Node* node = user.getHead();
+	myLink<cPerson> foundUser;
+	while (node != nullptr)
+	{
+		if (node->data.first == firstName)
+		{
+			foundUser.insertEnd(node->data);
+		}
+		node = node->next;
+	}
+	sizeOfUserArray = foundUser.size();
+	if (sizeOfUserArray > 0)
+	{
+		pAllTheUsers = new cPerson[sizeOfUserArray];
+
+		for (int i = 0; i < sizeOfUserArray; i++)
+		{
+			pAllTheUsers[i] = foundUser.getIndex(i)->data;
+		}
+
+		//sort
+		bubbleSort(pAllTheUsers, sizeOfUserArray, "byFirstname");
+		return true;
+	}
+	return false;
+}
+
+bool cSnotify::FindUsersLastName(std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	myLink<cPerson>::Node* node = user.getHead();
+	myLink<cPerson> foundUser;
+	while (node != nullptr)
+	{
+		if (node->data.last == lastName)
+		{
+			foundUser.insertEnd(node->data);
+		}
+		node = node->next;
+	}
+	sizeOfUserArray = foundUser.size();
+	if (sizeOfUserArray > 0)
+	{
+		pAllTheUsers = new cPerson[sizeOfUserArray];
+
+		for (int i = 0; i < sizeOfUserArray; i++)
+		{
+			pAllTheUsers[i] = foundUser.getIndex(i)->data;
+		}
+
+		//sort
+		bubbleSort(pAllTheUsers, sizeOfUserArray, "byLastname");
+		return true;
+	}
+	return false;
+}
+
+bool cSnotify::FindUsersFirstLastNames(std::string firstName, std::string lastName, cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray)
+{
+	myLink<cPerson>::Node* node = user.getHead();
+	myLink<cPerson> foundUser;
+	while (node != nullptr)
+	{
+		if ((node->data.first == firstName) && (node->data.last == lastName))
+		{
+			foundUser.insertEnd(node->data);
+		}
+		node = node->next;
+	}
+	sizeOfUserArray = foundUser.size();
+	if (sizeOfUserArray > 0)
+	{
+		pAllTheUsers = new cPerson[sizeOfUserArray];
+
+		for (int i = 0; i < sizeOfUserArray; i++)
+		{
+			pAllTheUsers[i] = foundUser.getIndex(i)->data;
+		}
+
+		//sort
+		bubbleSort(pAllTheUsers, sizeOfUserArray, "byLastNFirst");
+		return true;
+	}
+	return false;
+}
+
+void bubbleSort(cSong*& pLibraryArray, unsigned int& sizeOfLibary, bool byTitle)
+{
+	for (int i = 0; i < sizeOfLibary; i++)
+	{
+		for (int j = i + 1; j < sizeOfLibary; j++)
+		{
+			int cmpResult = 0;
+			if (byTitle)
+			{
+				cmpResult = std::strcmp(pLibraryArray[j].name.c_str(), pLibraryArray[i].name.c_str());
+			}
+			else
+			{
+				cmpResult = std::strcmp(pLibraryArray[j].artist.c_str(), pLibraryArray[i].artist.c_str());
+			}
+			if (cmpResult < 0)
+			{
+				cSong tmp = pLibraryArray[i];
+				pLibraryArray[i] = pLibraryArray[j];
+				pLibraryArray[j] = tmp;
+			}
+		}
+	}
+}
+
+void bubbleSort(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray,std::string option)
+{
+	for (int i = 0; i < sizeOfUserArray; i++)
+	{
+		for (int j = i + 1; j < sizeOfUserArray; j++)
+		{
+			int cmpResult = 0;
+			if (option == "byID")
+			{
+				cmpResult = (pAllTheUsers[j].getSnotifyUniqueUserID() < pAllTheUsers[j].getSnotifyUniqueUserID()) ? -1 : 1;
+			}
+			if (option == "byFirstname")
+			{
+				cmpResult = std::strcmp(pAllTheUsers[j].first.c_str(), pAllTheUsers[i].first.c_str());
+			}
+			if (option == "byLastname")
+			{
+				cmpResult = std::strcmp(pAllTheUsers[j].last.c_str(), pAllTheUsers[i].last.c_str());
+			}
+			if (option == "byLastNFirst")
+			{
+				cmpResult = std::strcmp(pAllTheUsers[j].last.c_str(), pAllTheUsers[i].last.c_str());
+				if (cmpResult == 0)
+				{
+					cmpResult = std::strcmp(pAllTheUsers[j].first.c_str(), pAllTheUsers[i].first.c_str());
+				}
+			}
+
+			if (cmpResult < 0)
+			{
+				cPerson tmp = pAllTheUsers[i];
+				pAllTheUsers[i] = pAllTheUsers[j];
+				pAllTheUsers[j] = tmp;
+			}
+		}
+	}
+}
