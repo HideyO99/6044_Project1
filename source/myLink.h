@@ -13,11 +13,13 @@ public:
 
 	~myLink()
 	{
-		//while (tail!=nullptr)
-		//{
-		//	delete tail;
-		//	tail = tail->prev;
-		//}
+		
+		while (tail!=nullptr)
+		{
+			Node* tmp = tail;
+			tail = tail->prev;
+			delete tmp;
+		}
 	}
 
 	struct Node
