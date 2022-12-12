@@ -74,9 +74,6 @@
     <ClCompile Include="source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="source\cSong.cpp">
-      <Filter>Song</Filter>
-    </ClCompile>
     <ClCompile Include="source\Libraty.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>

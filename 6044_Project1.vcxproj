@@ -141,7 +141,6 @@
     <ClCompile Include="source\cPerson.cpp" />
     <ClCompile Include="source\cPersonGenerator.cpp" />
     <ClCompile Include="source\cSnotify.cpp" />
-    <ClCompile Include="source\cSong.cpp" />
     <ClCompile Include="source\Libraty.cpp" />
     <ClCompile Include="source\main.cpp" />
   </ItemGroup>

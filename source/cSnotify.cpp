@@ -1,30 +1,5 @@
 #include "cSnotify.h"
 
-//template <typename T>
-//void swap(T* a, T* b)
-//{
-//	T tmp = *a;
-//	*a = *b;
-//	*b = tmp;
-//}
-//template <typename T>
-//T partition(T arr[], int low, int high)
-//{
-//	T pivot = arr[high];
-//	int i = low - 1;
-//	for (int j = low; j < high; j++)
-//	{
-//		if (arr[j] < pivot)
-//		{
-//			i++;
-//			swap(&arr[i], &arr[j]);
-//		}
-//	}
-//	swap(&arr[i + 1], &arr[high]);
-//	return (i + 1);
-//}
-//template <typename T>
-//void quickSort(T arr[], int low, int high);
 void bubbleSort(cSong*& pLibraryArray, unsigned int& sizeOfLibary, bool byTitle);
 void bubbleSort(cPerson*& pAllTheUsers, unsigned int& sizeOfUserArray, std::string option);
 
@@ -175,13 +150,6 @@ bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 {
 	for (int i = 0; i < song.size(); i++)
 	{
-		//for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
-		//{
-		//	if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == UniqueSongID)
-		//	{
-		//		library.getIndex(i)->data.song.deleteNode(library.getIndex(i)->data.song.getIndex(j));
-		//	}
-		//}
 		if (song.getIndex(i)->data.getUniqueID() == UniqueSongID)
 		{
 			RemoveSongFromUserLibrary(library.getIndex(i)->data.uID, UniqueSongID, errorString); //remove song from each user library first
@@ -216,22 +184,7 @@ bool cSnotify::AddSongToUserLibrary(unsigned int snotifyUserID, cSong* pNewSong,
 		}
 		node = node->next;
 	}
-	//for (int i = 0; i < library.size(); i++)
-	//{
-	//	if (library.getIndex(i)->data.uID == snotifyUserID)
-	//	{
-	//		for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
-	//		{
-	//			if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == pNewSong->getUniqueID())
-	//			{
-	//				errorString = "Already exist in the library";
-	//				return false;
-	//			}
-	//		}
-	//		library.getIndex(i)->data.song.insertEnd(*pNewSong);
-	//		return true;
-	//	}
-	//}
+
 	errorString = "Cannot find user ID";
 	return false;
 }
@@ -256,20 +209,7 @@ bool cSnotify::RemoveSongFromUserLibrary(unsigned int snotifyUserID, unsigned in
 		}
 		node = node->next;
 	}
-	//for (int i = 0; i < library.size(); i++)
-	//{
-	//	if (library.getIndex(i)->data.uID == snotifyUserID)
-	//	{
-	//		for (int j = 0; j < library.getIndex(i)->data.song.size(); j++)
-	//		{
-	//			if (library.getIndex(i)->data.song.getIndex(j)->data.getUniqueID() == SnotifySongID)
-	//			{
-	//				library.getIndex(i)->data.song.deleteNode(library.getIndex(i)->data.song.getIndex(j));
-	//				return true;
-	//			}
-	//		}
-	//	}
-	//}
+
 	errorString = "Cannot find user ID";
 	return false;
 }

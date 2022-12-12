@@ -52,11 +52,11 @@ bool cMusicGenerator::LoadMusicInformation(std::string musicFileName, std::strin
 				next_uID += rand() % MAX_ID_INCREEMNT;
 
 				songlink.insertEnd(*newSong);
-				//songlist.insert(*newSong);
+				
 				delete newSong;
 			}
 			linecount++;
-			//std::cout << linecount << std::endl;
+			
 		}
 		song_file.close();
 	}
@@ -78,13 +78,7 @@ cSong* cMusicGenerator::getRandomSong(void)
 
 cSong* cMusicGenerator::findSong(std::string songName, std::string artist)
 {
-	//int i = 0;
-	//while ((songlink.getIndex(i)->data.name != songName)&&(songlink.getIndex(i)->data.artist != artist))
-	//{
-	//	i++;
-	//}
 
- //   return &songlink.getIndex(i)->data;
 	myLink<cSong>::Node* node = songlink.getHead();
 	while (node!=nullptr)
 	{

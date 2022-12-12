@@ -24,7 +24,7 @@ private:
 	myLink<cSong>  	songlink;
 	unsigned int next_uID;
 	const unsigned int MAX_ID_INCREEMNT = 11;
-	//myList<cSong>  	songlist;
+	
 };
 
 #endif
