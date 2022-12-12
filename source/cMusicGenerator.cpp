@@ -78,13 +78,23 @@ cSong* cMusicGenerator::getRandomSong(void)
 
 cSong* cMusicGenerator::findSong(std::string songName, std::string artist)
 {
-	int i = 0;
-	while ((songlink.getIndex(i)->data.name != songName)&&(songlink.getIndex(i)->data.artist != artist))
-	{
-		i++;
-	}
+	//int i = 0;
+	//while ((songlink.getIndex(i)->data.name != songName)&&(songlink.getIndex(i)->data.artist != artist))
+	//{
+	//	i++;
+	//}
 
-    return &songlink.getIndex(i)->data;
+ //   return &songlink.getIndex(i)->data;
+	myLink<cSong>::Node* node = songlink.getHead();
+	while (node!=nullptr)
+	{
+		if ((node->data.name == songName) && (node->data.artist == artist))
+		{
+			return &node->data;
+		}
+		node = node->next;
+	}
+	return nullptr;
 }
 
 

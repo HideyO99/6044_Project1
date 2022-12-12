@@ -40,5 +40,13 @@ void main()
 			song[i].artist.c_str());
 	}
 	
+	cSong* findsong = pMusicGen->findSong("Naughty Girls (Need Love Too)", "Samantha Fox");
+	if (findsong) {
+		printf("musicGenerator.findSong() ::: getUniqueID: %d, Name: %s, Artist: %s\n",
+			findsong->getUniqueID(),
+			findsong->name.c_str(),
+			findsong->artist.c_str());
+	}
+
 	std::cout << error << std::endl;
 }
