@@ -13,11 +13,11 @@ public:
 
 	~myLink()
 	{
-		while (tail!=nullptr)
-		{
-			delete tail;
-			tail = tail->prev;
-		}
+		//while (tail!=nullptr)
+		//{
+		//	delete tail;
+		//	tail = tail->prev;
+		//}
 	}
 
 	struct Node
@@ -37,14 +37,15 @@ public:
 
 		if (head == nullptr)
 		{
-			head = newNode;
 			tail = newNode;
 		}
 		else
 		{
 			head->prev = newNode;
-			head = newNode;
 		}
+
+		head = newNode;
+		
 		count++;
 	}
 
@@ -66,10 +67,7 @@ public:
 		{
 			(newNode->next)->prev = newNode;
 		}
-		else
-		{
-			tail = newNode;
-		}
+
 		count++;
 	}
 
@@ -81,16 +79,18 @@ public:
 		newNode->next = nullptr;
 		newNode->prev = tail;
 
-		if (tail == nullptr)
+
+		if (head == nullptr)
 		{
+			newNode->prev = nullptr;
 			head = newNode;
 			tail = newNode;
+			count++;
+			return;
 		}
-		else
-		{
-			tail->next = newNode;
-			tail = newNode;
-		}
+
+		tail->next = newNode;
+		tail = newNode;
 		count++;
 	}
 
@@ -111,22 +111,44 @@ public:
 
 	void deleteNode(Node* delNode)
 	{
+		if (head == nullptr || delNode == nullptr)
+		{
+			return;
+		}
+		if ((delNode == head) && (delNode == tail))
+		{
+			head = nullptr;
+			tail = nullptr;
+			count = 0;
+			delete delNode;
+			return;
+		}
 		//head
 		if (delNode == head)
 		{
 			head = delNode->next;
 			head->prev = nullptr;
+			delete delNode;
+			count--;
+			return;
 		}
-		else if (delNode == tail)
+		if (delNode == tail)
 		{
 			tail = delNode->prev;
 			tail->next = nullptr;
+			delete delNode;
+			count--;
+			return;
 		}
-		else
+		if (delNode->next != nullptr)
 		{
-			delNode->prev->next = delNode->next;
 			delNode->next->prev = delNode->prev;
 		}
+		if (delNode->prev != nullptr)
+		{
+			delNode->prev->next = delNode->next;
+		}
+
 		delete delNode;
 		count--;
 	}

@@ -13,134 +13,212 @@ cSnotify::~cSnotify()
 
 bool cSnotify::AddUser(cPerson* pPerson, std::string& errorString)
 {
-	if (user.size() != 0)
+	myLink<cPerson>::Node* node = user.getHead();
+	while (node != nullptr)
 	{
-		for (int i = 0; i < user.size(); i++)
+		if (node->data.getSnotifyUniqueUserID() == pPerson->getSnotifyUniqueUserID())
 		{
-			if (user.getIndex(i)->data.getSnotifyUniqueUserID() == pPerson->getSnotifyUniqueUserID())
-			{
-				errorString = "User already exist";
-				return false;
-			}
-			if (user.getIndex(i)->data.getSnotifyUniqueUserID() < pPerson->getSnotifyUniqueUserID())
-			{
-				continue;
-			}
-			else
-			{
-				user.insertAfter(user.getIndex(i)->prev, *pPerson);
-				Library* ulib = new Library();
-				ulib->uID = pPerson->getSnotifyUniqueUserID();
-				library.insertAfter(library.getIndex(i)->prev, *ulib);
-				return true;
-			}
+			errorString = "User already exist";
+			return false;
 		}
-		user.insertEnd(*pPerson);
-		Library* ulib = new Library();
-		ulib->uID = pPerson->getSnotifyUniqueUserID();
-		library.insertEnd( *ulib);
+		node = node->next;
 	}
-	else
-	{
-		user.insertEnd(*pPerson);
-		Library* ulib = new Library();
-		ulib->uID = pPerson->getSnotifyUniqueUserID();
-		library.insertEnd( *ulib);
-	}
+	user.insertEnd(*pPerson);
+	Library* ulib = new Library();
+	ulib->uID = pPerson->getSnotifyUniqueUserID();
+	library.insertEnd(*ulib);
+
+	//if (user.size() != 0)
+	//{
+	//	for (int i = 0; i < user.size(); i++)
+	//	{
+	//		if (user.getIndex(i)->data.getSnotifyUniqueUserID() == pPerson->getSnotifyUniqueUserID())
+	//		{
+	//			errorString = "User already exist";
+	//			return false;
+	//		}
+	//		if (user.getIndex(i)->data.getSnotifyUniqueUserID() < pPerson->getSnotifyUniqueUserID())
+	//		{
+	//			continue;
+	//		}
+	//		else
+	//		{
+	//			user.insertAfter(user.getIndex(i)->prev, *pPerson);
+	//			Library* ulib = new Library();
+	//			ulib->uID = pPerson->getSnotifyUniqueUserID();
+	//			library.insertAfter(library.getIndex(i)->prev, *ulib);
+	//			return true;
+	//		}
+	//	}
+	//	user.insertEnd(*pPerson);
+	//	Library* ulib = new Library();
+	//	ulib->uID = pPerson->getSnotifyUniqueUserID();
+	//	library.insertEnd( *ulib);
+	//}
+	//else
+	//{
+	//	user.insertEnd(*pPerson);
+	//	Library* ulib = new Library();
+	//	ulib->uID = pPerson->getSnotifyUniqueUserID();
+	//	library.insertEnd( *ulib);
+	//}
 
 	return true;
 }
 
 bool cSnotify::UpdateUser(cPerson* pPerson, std::string& errorString)
 {
-	for (int i = 0; i < user.size(); i++)
+	myLink<cPerson>::Node* node = user.getHead();
+	while (node != nullptr)
 	{
-		if ((user.getIndex(i)->data.getSnotifyUniqueUserID() == pPerson->getSnotifyUniqueUserID()) && (user.getIndex(i)->data.SIN == pPerson->SIN))
+		if ((node->data.getSnotifyUniqueUserID() == pPerson->getSnotifyUniqueUserID()) && (node->data.SIN == pPerson->SIN))
 		{
-			//(user.getIndex(i)->data) = *pPerson;
-			user.getIndex(i)->data.first = pPerson->first;
-			user.getIndex(i)->data.middle = pPerson->middle;
-			user.getIndex(i)->data.last = pPerson->last;
+			node->data.first = pPerson->first;
+			node->data.middle = pPerson->middle;
+			node->data.last = pPerson->last;
 
-			user.getIndex(i)->data.gender = pPerson->gender;
-			user.getIndex(i)->data.age = pPerson->age;
-			
-			user.getIndex(i)->data.streetNumber = pPerson->streetNumber;
-			user.getIndex(i)->data.streetName = pPerson->streetName;
-			user.getIndex(i)->data.streetType = pPerson->streetType;
-			user.getIndex(i)->data.streetDirection = pPerson->streetDirection;
+			node->data.gender = pPerson->gender;
+			node->data.age = pPerson->age;
 
-			user.getIndex(i)->data.city = pPerson->city;
-			user.getIndex(i)->data.province = pPerson->province;
+			node->data.streetNumber = pPerson->streetNumber;
+			node->data.streetName = pPerson->streetName;
+			node->data.streetType = pPerson->streetType;
+			node->data.streetDirection = pPerson->streetDirection;
+
+			node->data.city = pPerson->city;
+			node->data.province = pPerson->province;
 			for (int j = 0; j < 6; j++)
 			{
-				user.getIndex(i)->data.postalCode[j] = pPerson->postalCode[j];
+				node->data.postalCode[j] = pPerson->postalCode[j];
 			}
 			return true;
 		}
+		node = node->next;
 	}
+	//for (int i = 0; i < user.size(); i++)
+	//{
+	//	if ((user.getIndex(i)->data.getSnotifyUniqueUserID() == pPerson->getSnotifyUniqueUserID()) && (user.getIndex(i)->data.SIN == pPerson->SIN))
+	//	{
+	//		//(user.getIndex(i)->data) = *pPerson;
+	//		user.getIndex(i)->data.first = pPerson->first;
+	//		user.getIndex(i)->data.middle = pPerson->middle;
+	//		user.getIndex(i)->data.last = pPerson->last;
+
+	//		user.getIndex(i)->data.gender = pPerson->gender;
+	//		user.getIndex(i)->data.age = pPerson->age;
+	//		
+	//		user.getIndex(i)->data.streetNumber = pPerson->streetNumber;
+	//		user.getIndex(i)->data.streetName = pPerson->streetName;
+	//		user.getIndex(i)->data.streetType = pPerson->streetType;
+	//		user.getIndex(i)->data.streetDirection = pPerson->streetDirection;
+
+	//		user.getIndex(i)->data.city = pPerson->city;
+	//		user.getIndex(i)->data.province = pPerson->province;
+	//		for (int j = 0; j < 6; j++)
+	//		{
+	//			user.getIndex(i)->data.postalCode[j] = pPerson->postalCode[j];
+	//		}
+	//		return true;
+	//	}
+	//}
 	errorString = "Cannot find user, Cannot update";
 	return false;
 }
 
 bool cSnotify::DeleteUser(unsigned int SnotifyUserID, std::string& errorString)
 {
-	for (int i = 0; i < user.size(); i++)
+	myLink<cPerson>::Node* node = user.getHead();
+	while (node != nullptr)
 	{
-		if (user.getIndex(i)->data.getSnotifyUniqueUserID() == SnotifyUserID)
+		if (node->data.getSnotifyUniqueUserID() == SnotifyUserID)
 		{
-			user.deleteNode(user.getIndex(i));
+			user.deleteNode(node);
+			myLink<Library>::Node* libNode = library.getHead();
+			while (libNode != nullptr)
+			{
+				if (libNode->data.uID == SnotifyUserID)
+				{
+					library.deleteNode(libNode);
+					break;
+				}
+				libNode = libNode->next;
+			}
 			return true;
 		}
+		node = node->next;
 	}
+
+	//for (int i = 0; i < user.size(); i++)
+	//{
+	//	if (user.getIndex(i)->data.getSnotifyUniqueUserID() == SnotifyUserID)
+	//	{
+	//		user.deleteNode(user.getIndex(i));
+	//		return true;
+	//	}
+	//}
 	errorString = "Cannot find SnotifyID";
 	return false;
 }
 
 bool cSnotify::AddSong(cSong* pSong, std::string& errorString)
 {
-	if (song.size() != 0)
+	myLink<cSong>::Node* node = song.getHead();
+	while (node != nullptr)
 	{
-		for (int i = 0; i < song.size(); i++)
+		if (node->data.getUniqueID() == pSong->getUniqueID())
 		{
-			if (song.getIndex(i)->data.getUniqueID() == pSong->getUniqueID())
-			{
-				errorString = "Song already exist";
-				return false;
-			}
-			if (song.getIndex(i)->data.getUniqueID() < pSong->getUniqueID())
-			{
-				continue;
-			}
-			else
-			{
-				song.insertAfter(song.getIndex(i)->prev, *pSong);
-				return true;
-			}
+			errorString = "Song already exist";
+			return false;
 		}
-		song.insertEnd(*pSong);
+		node = node->next;
 	}
-	else
-	{
-		song.insertEnd(*pSong);
-	}
+	song.insertEnd(*pSong);
+
+	//if (song.size() != 0)
+	//{
+	//	for (int i = 0; i < song.size(); i++)
+	//	{
+	//		if (song.getIndex(i)->data.getUniqueID() == pSong->getUniqueID())
+	//		{
+	//			errorString = "Song already exist";
+	//			return false;
+	//		}
+	//		if (song.getIndex(i)->data.getUniqueID() < pSong->getUniqueID())
+	//		{
+	//			continue;
+	//		}
+	//		else
+	//		{
+	//			song.insertAfter(song.getIndex(i)->prev, *pSong);
+	//			return true;
+	//		}
+	//	}
+	//	song.insertEnd(*pSong);
+	//}
+	//else
+	//{
+	//	song.insertEnd(*pSong);
+	//}
 
 	return true;
 }
 
 bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
 {
-	for (int i = 0; i < song.size(); i++)
+	myLink<cSong>::Node* node = song.getHead();
+	while (node != nullptr)
 	{
-		if (song.getIndex(i)->data.getUniqueID() == pSong->getUniqueID())
+		if (node->data.getUniqueID() == pSong->getUniqueID())
 		{
-			song.getIndex(i)->data.name = pSong->name;
-			song.getIndex(i)->data.artist = pSong->artist;
-			song.getIndex(i)->data.rating = pSong->rating;
-			song.getIndex(i)->data.numberOfTimesPlayed = pSong->numberOfTimesPlayed;
-			
+			node->data.artist;
+			node->data.name = pSong->name;
+			node->data.artist = pSong->artist;
+			node->data.rating = pSong->rating;
+			node->data.numberOfTimesPlayed = pSong->numberOfTimesPlayed;
+
 			return true;
 		}
+		node = node->next;
 	}
 	errorString = "Cannot find song to update";
 	return false;
@@ -148,16 +226,23 @@ bool cSnotify::UpdateSong(cSong* pSong, std::string& errorString)
 
 bool cSnotify::DeleteSong(unsigned int UniqueSongID, std::string& errorString)
 {
-	for (int i = 0; i < song.size(); i++)
+	myLink<Library>::Node* node = library.getHead();
+	while (node != nullptr)
 	{
-		if (song.getIndex(i)->data.getUniqueID() == UniqueSongID)
+		RemoveSongFromUserLibrary(UniqueSongID, node->data.uID, errorString);
+		node = node->next;
+	}
+	myLink<cSong>::Node* songNode = song.getHead();
+	while (songNode!=nullptr)
+	{
+		if (songNode->data.getUniqueID() == UniqueSongID)
 		{
-			RemoveSongFromUserLibrary(library.getIndex(i)->data.uID, UniqueSongID, errorString); //remove song from each user library first
-			song.deleteNode(song.getIndex(i));
-
+			song.deleteNode(songNode);
 			return true;
 		}
+		songNode = songNode->next;
 	}
+
 	errorString = "Cannot find song to delete";
 	return false;
 }
